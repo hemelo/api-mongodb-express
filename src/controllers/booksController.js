@@ -1,8 +1,12 @@
 import Book from '../models/book.js'
 
 class BookController {
-  static index = (_req, res) => {
-    Book.find((_err, books) => res.status(200).json(books))
+  static index = (req, res) => {
+    if (req.query.id == undefined) {
+      Book.find((_err, books) => res.status(200).json(books))
+    } else {
+      res.redirect(`/books/${req.query.id}`)
+    }
   }
 
   static show = (req, res) => {
@@ -10,7 +14,7 @@ class BookController {
 
     Book.findById(id, (err, books) => {
       if (err) {
-        res.status(400).send({ message: `${err.message} - Could not find by id.` })
+        res.status(400).send({ message: 'Could not find by the id.' })
       } else {
         res.status(200).send(books)
       }
